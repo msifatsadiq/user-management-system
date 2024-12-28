@@ -98,3 +98,35 @@ exports.create = (req, res) => {
     );
   });
 };
+
+// edit user
+
+exports.edit = (req, res) => {
+//    res.render('editUser')
+
+   pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Database connection failed:", err);
+      return res.status(500).send("Database connection failed"); // Send response and exit
+    }
+    console.log("Connected to DB as ID " + connection.threadId);
+    // get the data from the form
+    let searchItem = req.body.search;
+    // Query the database
+    connection.query(
+      "SELECT * FROM users WHERE id = ? ",
+      [req.params.id],
+      (err, rows) => {
+        // Release the connection back to the pool
+        connection.release();
+        if (err) {
+          console.error("Error executing query:", err);
+          return res.status(500).send("Error fetching users"); // Send response and exit
+        }
+        console.log("The data from user table:\n", rows);
+        // Render the view with data
+        res.render("editUser", { rows });
+      }
+    );
+  });
+  };
