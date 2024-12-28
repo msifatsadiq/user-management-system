@@ -65,3 +65,36 @@ exports.find = (req, res) => {
 };
 // find user by search end---------------------------------------------------------------
 
+exports.form = (req, res) => {
+  res.render("addUser");
+};
+
+// Add new user start---------------------------------------------------------------
+exports.create = (req, res) => {
+  const { first_name, last_name, email, phone, comments } = req.body;
+  pool.getConnection((err, connection) => {
+    if (err) {
+      console.error("Database connection failed:", err);
+      return res.status(500).send("Database connection failed"); // Send response and exit
+    }
+    console.log("Connected to DB as ID " + connection.threadId);
+    // get the data from the form
+    let searchItem = req.body.search;
+    // Query the database
+    connection.query(
+      "INSERT INTO users SET first_name = ?,last_name = ?, email = ?, phone = ?, comments = ? ",
+      [first_name, last_name, email, phone, comments],
+      (err, rows) => {
+        // Release the connection back to the pool
+        connection.release();
+        if (err) {
+          console.error("Error executing query:", err);
+          return res.status(500).send("Error fetching users"); // Send response and exit
+        }
+        console.log("The data from user table:\n", rows);
+        // Render the view with data
+        res.render("addUser",{alert: 'User Added Successfully'});
+      }
+    );
+  });
+};
