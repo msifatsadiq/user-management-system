@@ -13,15 +13,9 @@ app.use(express.json());
 // Static files
 app.use(express.static('public'));
 
-// Templating engine
+// Templating engine using handlebars
 app.engine('hbs', engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
-
-
-
-
-
-
 const route = require('./server/route/user')
 app.use('/',route);
 

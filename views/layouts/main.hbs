@@ -45,12 +45,19 @@
             </li>
             <!-- Additional nav items can be added here -->
           </ul>
-          <form class="d-flex" role="search">
+          <form
+            class="d-flex"
+            role="search"
+            method="post"
+            action="/"
+            novalidate
+          >
             <input
               class="form-control me-2"
               type="search"
               placeholder="Search"
               aria-label="Search"
+              name="search"
             />
             <button class="btn btn-outline-light" type="submit">Search</button>
           </form>
